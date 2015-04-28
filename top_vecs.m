@@ -25,8 +25,6 @@ function [coff] = top_vecs(eval,evec,data,req_perc)
     bar(top_ei_perc);
     
     cent_data = (data - repmat(data_mean,size(data,1),1));
-    coff = evec' * cent_data';
-
-    plot(coff(1,:),coff(2,:),'.')
+    coff = top_evec' * cent_data';
     
 end
