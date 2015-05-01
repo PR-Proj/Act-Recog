@@ -1,11 +1,9 @@
 %returns principal component coffecients
 
-function [coff] = top_vecs(eval,evec,data,req_perc)
+function [coff] = top_vecs(eval,evec,data,train_mean,req_perc)
     perc = 0;
     total = sum(eval);
     temp = 0;
-    
-    data_mean = mean(data);
     
     for i = 1:size(eval)
         temp = temp + eval(i);
@@ -24,7 +22,7 @@ function [coff] = top_vecs(eval,evec,data,req_perc)
     % EigenSpectrum Bar Plot
     bar(top_ei_perc);
     
-    cent_data = (data - repmat(data_mean,size(data,1),1));
-    coff = top_evec' * cent_data';
+    cent_data = (data - repmat(train_mean,size(data,1),1));
+    coff = (top_evec' * cent_data')';
     
 end

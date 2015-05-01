@@ -1,7 +1,5 @@
 clear;
 
-format longE;
-
 train_data = importdata('dataset/train/X_train.txt');
 
 train_labels = importdata('dataset/train/y_train.txt');
@@ -34,7 +32,15 @@ eval = diag(eval);
 eval = real(eval);
 evec = real(evec(:,1:5));
 
+% proj = train_data * evec;
+% plot(proj(:,1),proj(:,2),'k*','MarkerSize',5);
+% 
+% proj = test_data * evec;
+% plot(proj(:,1),proj(:,2),'k*','MarkerSize',5);
+
 cnt = 0;
+output = zeros(1,size(test_labels,1));
+
 for i = 1:size(test_data,1)
     t_pr = test_data(i,:) * evec;
     dist = zeros(1,6);
@@ -43,6 +49,7 @@ for i = 1:size(test_data,1)
         dist(j) = pdist([t_pr;m_pr]);
     end
     [v,ind] = min(dist);
+    output(i) = ind;
     if(ind == test_labels(i))
         cnt = cnt + 1;
     end
@@ -50,3 +57,12 @@ end
 
 cnt/size(test_labels,1)
 
+test_op = zeros(6,2947);
+test_t = zeros(6,2947);
+
+for i = 1:2947
+    test_op(output(i),i) = 1;
+    test_t(test_labels(i),i) = 1;
+end
+
+plotconfusion(test_t,test_op);
